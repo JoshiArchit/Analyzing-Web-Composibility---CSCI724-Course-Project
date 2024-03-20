@@ -2,7 +2,7 @@
 Filename : cleanDataSet
 Author : Archit
 Date Created : 3/19/2024
-Description : 
+Description : Scan through data and remove any invalid files. Use helper functions from other scripts.
 Language : python3
 """
 import os
