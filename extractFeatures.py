@@ -10,15 +10,11 @@ import os
 
 
 def extractFeatures(data):
-    # Get the paths key from the json file
-    paths = data['paths']
-    # If the path doesnt exists return None
-    if not paths:
-        return False
-    # Iterate over the paths and check if it has a get, post keys nested inside
-    for path in paths:
-        if 'get' in paths[path] or 'post' in paths[path]:
-            return True
+    if 'paths' in data.keys():
+        paths = data['paths']
+        for path in paths:
+            if 'get' in paths[path] or 'post' in paths[path]:
+                return True
     return False
 
 
@@ -53,14 +49,12 @@ def do_the_thing():
 
     invalid_file_count = 0
 
-    count = 0
     folder_path = 'APIsGuru'
     # Iterate through all the files in APIsGuru folder
     for file in os.listdir(folder_path):
         if 'json' in file:
-            count += 1
             file_name = "APIsGuru/" + file
-
+            print("Processing: ", file_name)
             with open(file_name, 'r', encoding='utf-8') as api_file:
                 data = json.load(api_file)
                 valid = extractFeatures(data)
@@ -73,8 +67,6 @@ def do_the_thing():
                     invalid_file_count += 1
                     # print("Invalid API: ", file)
     print("Invalid file count: ", invalid_file_count)
-    print("Processed: ", count)
-
 
 def main():
     do_the_thing()
