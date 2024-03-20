@@ -74,6 +74,8 @@ def read_yaml():
                 with open(file_name, 'r', encoding='utf-8') as api_file:
                     data = yaml.safe_load(api_file)
                     if check_num_paths(data) and check_path_parameters(data) and check_server(data):
+                        with open(valid_yaml, 'a') as valid_file:
+                            valid_file.write(file + '\n')
                         valid_files += 1
                     else:
                         invalid_files += 1
