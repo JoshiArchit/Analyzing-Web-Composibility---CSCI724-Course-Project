@@ -1,5 +1,5 @@
 """
-Get the server from the API description
+Get the server from the API description.
 """
 
 import json
@@ -54,6 +54,7 @@ def do_the_thing():
                 continue
     print("Invalid file count: ", invalid_file_count)
     print("Total JSON file count: ", total_json_count)
+
 
 def main():
     do_the_thing()
