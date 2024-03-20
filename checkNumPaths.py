@@ -16,7 +16,6 @@ def get_num_paths(data):
         return False
 
 
-
 def do_the_thing():
     valid_file_name = 'valid_num_paths_APIs_internet.txt'
     # Clear the file
@@ -25,7 +24,6 @@ def do_the_thing():
 
     invalid_file_count = 0
     total_json_count = 0
-
 
     folder_path = 'internet'
     # Iterate through all the files in APIsGuru folder
@@ -50,6 +48,7 @@ def do_the_thing():
                 continue
     print("Invalid file count: ", invalid_file_count)
     print("Total JSON file count: ", total_json_count)
+
 
 def main():
     do_the_thing()
