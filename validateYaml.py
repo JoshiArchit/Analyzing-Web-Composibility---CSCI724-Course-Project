@@ -98,4 +98,9 @@ def unit_test():
             print("Valid yaml file")
 
 
-read_yaml()
+def main():
+    read_yaml()
+    # unit_test()
+
+if __name__ == '__main__':
+    main()
