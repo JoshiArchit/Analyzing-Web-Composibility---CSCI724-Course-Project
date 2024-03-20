@@ -8,7 +8,7 @@ import os
 
 def get_server(data):
     try:
-        if 'swaggger' in data.keys():
+        if 'swagger' in data.keys():
             if data['host']:
                 return True
         else:
