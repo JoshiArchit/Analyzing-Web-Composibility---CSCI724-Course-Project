@@ -123,21 +123,37 @@ def unit_test():
     #     print(f"Match count for operation {operation_key}: {match_count}")
     #     print('\n')
 
-    for post_operation_key, post_operation in post_document.items():
-        print(f"Comparing operation: {post_operation_key}")
-        post_parameters = post_operation.get('parameters', {})
-        # Count matches for each POST parameter with GET parameters
-        match_count = 0
-        for get_operation in get_document.values():
-        # for get_operation in get_collection.find({}):
-            get_parameters = get_operation.get('parameters', {})
-            for post_param_key, post_param_value in post_parameters.items():
-                if post_param_value is not None:
-                    get_param_value = get_parameters.get(post_param_key)
-                    if get_param_value is not None and post_param_value == get_param_value:
-                        match_count += 1
-        print(f"Match count for operation {post_operation_key}: {match_count}")
-        print('\n')
+    """
+    Steps
+    1. iterates through the items in the post_document collection (this is the post parameter)
+    2. iterates through each parameter in the post_operation
+    3. iterates through the get_document collection (this is the get parameter)
+    4. iterates through each parameter in the get_operation
+    5. compares the get and post parameters values
+    6. counts the number of matches
+    """
+
+    for post in post_collection.find({}):
+        post.pop('_id', None)
+        for post_operation_key, post_operation in post.items():
+            print(f"Comparing operation: {post_operation_key}")
+            post_parameters = post_operation.get('parameters', {})
+            # Count matches for each POST parameter with GET parameters
+            match_count = 0
+            # for get_operation in get_document.values():
+            for get_operation in get_collection.find({}):
+                get_operation.pop('_id', None)
+                for _, operation_data in get_operation.items():
+                    # Access the 'parameters' key for each operation
+                    get_parameters = operation_data.get('parameters', {})
+                    # Compare GET and POST parameters
+                    for post_param_key, post_param_value in post_parameters.items():
+                        if post_param_value is not None:
+                            get_param_value = get_parameters.get(post_param_key)
+                            if get_param_value is not None and post_param_value == get_param_value:
+                                match_count += 1
+            print(f"Match count for operation {post_operation_key}: {match_count}")
+            print('\n')
 
 
 
