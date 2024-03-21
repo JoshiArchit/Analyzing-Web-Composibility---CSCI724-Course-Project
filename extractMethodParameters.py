@@ -6,6 +6,7 @@ Description : Script to extract the get/post parameters from the API file.
 Language : python3
 """
 import json
+import os
 
 
 def getParameters(method_type, operation_number):
@@ -15,7 +16,7 @@ def getParameters(method_type, operation_number):
         doc['method'] = 'get'
         parameters = method_type['get']['parameters']
         for parameter in parameters:
-            # Check if schema key exists. Then its a complex object
+            # Check if schema key exists. Then it's a complex object
             if 'schema' in parameter:
                 schema = parameter['schema']
                 doc['parameters'] = {
@@ -36,6 +37,7 @@ def getParameters(method_type, operation_number):
                     "type": parameter['type']
                 }
     return doc
+
 
 def extractParameters(api_file):
     doc = dict()
@@ -82,6 +84,7 @@ def do_the_thing():
             except:
                 raise FileNotFoundError("API file doesnt exist")
 
+
 def unit_test():
     """Test for single API file to fix bugs and tune code"""
     file = 'APIsGuru/openapi.json.1'
@@ -89,5 +92,6 @@ def unit_test():
         data = json.load(api_file)
         document = extractParameters(data)
         print(document)
+
 
 unit_test()
