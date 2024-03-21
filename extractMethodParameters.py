@@ -128,8 +128,8 @@ def unit_test():
         post_parameters = post_operation.get('parameters', {})
         # Count matches for each POST parameter with GET parameters
         match_count = 0
-        # for get_operation in get_document.values():
-        for get_operation in get_collection.find({}):
+        for get_operation in get_document.values():
+        # for get_operation in get_collection.find({}):
             get_parameters = get_operation.get('parameters', {})
             for post_param_key, post_param_value in post_parameters.items():
                 if post_param_value is not None:
