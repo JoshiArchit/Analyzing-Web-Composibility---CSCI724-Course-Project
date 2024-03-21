@@ -115,7 +115,7 @@ def postParameters(api, path_dictionary, method_type):
 def extractParameters(api_file):
     """
     Extracts the parameters from the API file
-    :param api_file: api file
+    :param api_file: api file from which the parameters are to be extracted
     :return: document with parameters for each path
     """
     doc = dict()
