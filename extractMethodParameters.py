@@ -10,37 +10,75 @@ import os
 from database import get_collection, post_collection
 
 
-def getParameters(method_type, type):
+def getParameters(path_dictionary, method_type):
     doc = dict()
-    if 'parameters' in method_type[type]:
+    doc['method'] = method_type
+    doc['description'] = path_dictionary[method_type]['description']
+    if 'parameters' in path_dictionary[method_type]:
         # Move to another method later
-        doc['method'] = type
-        parameters = method_type[type]['parameters']
+        parameters = path_dictionary[method_type]['parameters']
         for parameter in parameters:
-            # Check if 'schema' key exists in parameter
-            if 'schema' in parameter:
-                schema = parameter['schema']
-                doc['parameters'] = {
-                    "name": parameter.get('name'),
-                    "in": parameter.get('in'),
-                    "description": parameter.get('description'),
-                    "type": schema.get('type'),
-                    "default": schema.get('default'),
-                    "example": schema.get('example'),
-                    "schema": parameter.get('schema')
-                }
-            else:
-                # Check if keys exist in parameter dictionary
-                doc['parameters'] = {
-                    "name": parameter.get('name'),
-                    "in": parameter.get('in'),
-                    "description": parameter.get('description'),
-                    "required": parameter.get('required'),
-                    "type": parameter.get('type')
-                }
+            try:
+                # Check if 'schema' key exists in parameter
+                if 'schema' in parameter:
+                    schema = parameter['schema']
+                    doc['parameters'] = {
+                        "name": parameter.get('name'),
+                        "in": parameter.get('in'),
+                        "description": parameter.get('description'),
+                        "type": schema.get('type'),
+                        "default": schema.get('default'),
+                        "example": schema.get('example'),
+                        "schema": parameter.get('schema'),
+                        "response": parameter.get('responses')
+                    }
+                else:
+                    # Check if keys exist in parameter dictionary
+                    doc['parameters'] = {
+                        "name": parameter.get('name'),
+                        "in": parameter.get('in'),
+                        "description": parameter.get('description'),
+                        "required": parameter.get('required'),
+                        "type": parameter.get('type')
+                    }
+            except KeyError as e:
+                # print missing key
+                print(f"KeyError: {e}")
+                # Skip the parameter and continue
+                continue
     return doc
 
-def extractParameters(api_file, type):
+
+def postParameters(api, path_dictionary, method_type):
+    # Input is the path dictionary and the method type
+    doc = dict()
+    doc['description'] = path_dictionary['description']
+
+    # Post request can send parameters via url or a request body, extract both
+    if 'requestBody' in path_dictionary:
+        # Extract parameters from the requestBody
+        request_body = path_dictionary['requestBody']
+        # Check if 'content' key exists in requestBody
+        if not 'content' in request_body:
+            # The parameters is stored as $ref, extract the reference
+            ref = request_body['$ref']
+            # Traverse the reference to get the parameters
+            ref = ref.split('/')
+            ref = ref[-1]
+            try:
+                # Get the parameters from the reference
+                parameters = api['components']['schemas'][ref]
+                # Extract the parameters
+                doc['parameters'] = parameters['properties']
+            except KeyError as e:
+                # print missing key
+                print(f"KeyError: {e}")
+                # Skip the parameter and continue
+                pass
+    return doc
+
+
+def extractParameters(api_file):
     doc = dict()
     # Document format ->
     # { "operation_0": {
@@ -59,9 +97,12 @@ def extractParameters(api_file, type):
     operation_number = 0
     for path in path_list:
         # Get method type from each path
+        print("Operation number: ", operation_number)
         method_type = path_list[path]
-        if type in method_type:
-            doc[f"operation_{operation_number}"] = getParameters(method_type, type)
+        if 'get' in method_type:
+            doc[f"operation_{operation_number}"] = getParameters(method_type, 'get')
+        elif 'post' in method_type:
+            doc[f"operation_{operation_number}"] = postParameters(api_file, method_type['post'], 'post')
             operation_number += 1
     return doc
 
@@ -96,7 +137,8 @@ def unit_test():
     post_file = 'APIsGuru/openapi.json.2'
     with open(get_file, 'r', encoding='utf-8') as api_file:
         get_data = json.load(api_file)
-        get_document = extractParameters(get_data, 'get')
+        # get_document = extractParameters(get_data, 'get')
+        get_document = extractParameters(get_data)
         get_collection.insert_one(get_document)
         get_document.pop('_id', None)
 
@@ -104,7 +146,8 @@ def unit_test():
 
     with open(post_file, 'r', encoding='utf-8') as api_file:
         post_data = json.load(api_file)
-        post_document = extractParameters(post_data, 'post')
+        # post_document = extractParameters(post_data, 'post')
+        post_document = extractParameters(post_data)
         post_collection.insert_one(post_document)
         post_document.pop('_id', None)
 
@@ -156,5 +199,13 @@ def unit_test():
             print('\n')
 
 
+def unit_test_post_document():
+    post_file = 'APIsGuru/openapi.json.2'
+    with open(post_file, 'r', encoding='utf-8') as api_file:
+        post_data = json.load(api_file)
+        post_document = extractParameters(post_data)
+        print(post_document)
 
-unit_test()
+
+# unit_test()
+unit_test_post_document()
