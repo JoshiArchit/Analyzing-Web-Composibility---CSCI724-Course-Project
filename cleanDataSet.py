@@ -7,12 +7,11 @@ basic constraints mentioned by the original authors.
 Link to the original paper: https://ieeexplore.ieee.org/document/9885779
 Language : python3
 """
+
 import os
 import json
 from extractMethodParameters import extractParameters
 import yaml
-from database import get_collection, post_collection
-
 
 
 def extractFeatures(data):
@@ -49,7 +48,6 @@ def get_num_paths(data):
             if len(data['paths']) > 2:
                 return True
     except KeyError as e:
-        # print("Error in get_num_paths")
         return False
 
 
@@ -72,15 +70,7 @@ def get_server(data):
                     if 'url' in server.keys() and server['url'] != '':
                         return True
     except KeyError as e:
-        # print("Error in get_server")
         return False
-
-
-def clear_collections():
-    get_collection.delete_many({})
-    post_collection.delete_many({})
-
-
 
 
 def clean_Data_Set():
@@ -90,12 +80,6 @@ def clean_Data_Set():
 
     :return: None
     """
-    # clear_collections()
-
-    # valid_file_name = 'final_valid_APIs_apisguru.txt'
-    # # Clear the file
-    # with open(valid_file_name, 'w') as valid_file:
-    #     valid_file.truncate(0)
 
     invalid_file_count = 0
     valid_files = 0
@@ -116,14 +100,7 @@ def clean_Data_Set():
                 with open(file_name, 'r', encoding='utf-8') as api_file:
                     data = json.load(api_file)
                     if extractFeatures(data) and get_server(data) and get_num_paths(data):
-                        # with open(valid_file_name, 'a') as valid_file:
-                        #     valid_file.write(file + '\n')
                         get_document, post_document = extractParameters(data)
-                        # try:
-                        #     get_collection.insert_one(get_document)
-                        #     post_collection.insert_one(post_document)
-                        # except:
-                        #     print("Error adding to database. Skipping.")
                         try:
                             # add the files to the get_requests and post_requests folders
                             with open(f"post_requests/{file}", 'w') as post_file:
@@ -147,14 +124,7 @@ def clean_Data_Set():
                 with open(file_name, 'r', encoding='utf-8') as api_file:
                     data = yaml.safe_load(api_file)
                     if get_num_paths(data) and extractFeatures(data) and get_server(data):
-                        # with open(valid_file_name, 'a') as valid_file:
-                        #     valid_file.write(file + '\n')
                         get_document, post_document = extractParameters(data)
-                        # try:
-                        #     get_collection.insert_one(get_document)
-                        #     post_collection.insert_one(post_document)
-                        # except:
-                        #     print("Error adding to database. Skipping.")
                         try:
                             with open(f"post_requests/{file}", 'w') as post_file:
                                 json.dump(post_document, post_file)

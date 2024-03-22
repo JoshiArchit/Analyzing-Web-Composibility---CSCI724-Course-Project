@@ -1,12 +1,29 @@
 """
-This script compares the names of the properties of the parameters
+Filename : property_name_match.py
+Author : Archit Joshi (aj6082), Athina Stewart (as1896)
+Date Created : 3/21/2024
+Description : This script compares the names of the properties of the parameters
+in the post requests of document 1 against the names of the properties of the parameters
+of the parameters in document 2.
+Link to the original paper: https://ieeexplore.ieee.org/document/9885779
+Language : python3
 """
+
 import json
 import os
 import time
 
 
 def compare_dicts(dict1, dict2):
+    """
+    This function compares the keys of the parameters in the post requests of
+    doc_1 against the keys of the parameters in the get requests of doc_2. If the
+    keys of the post parameters are exactly the same as the keys of the get
+    parameters, return True
+    :param dict1: post request dictionary
+    :param dict2: get request dictionary
+    :return: True if the keys of the post parameters are exactly the same as the keys of the get parameters
+    """
     # if the keys of dict1 are exactly the same as the keys of
     # dict2, return True
     if dict1.keys() == dict2.keys():

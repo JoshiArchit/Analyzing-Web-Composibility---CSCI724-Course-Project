@@ -1,8 +1,24 @@
+"""
+Filename : count_endpoints.py
+Author : Archit Joshi (aj6082), Athina Stewart (as1896)
+Date Created : 3/22/2024
+Description : This script counts the number of nested parameters in the post
+and get requests. It also calculates the fraction of data-type matches and
+property-name matches.
+Link to the original paper: https://ieeexplore.ieee.org/document/9885779
+Language : python3
+"""
+
 import os
 import json
 
 
 def count_nested_parameters(folder_path):
+    """
+    This function counts the number of nested parameters in the post and get requests
+    :param folder_path: name of the folder containing the post or get requests
+    :return: count of the number of nested parameters
+    """
     total_nested_params = 0
 
     # Check if the directory exists
@@ -24,7 +40,11 @@ def count_nested_parameters(folder_path):
     return total_nested_params
 
 
-def main():
+def print_stats():
+    """
+    This function prints the statistics of the number of nested parameters in the post and get requests
+    :return: None
+    """
     # Define paths to "post" and "get" folders
     post_folder_path = "post_requests"
     get_folder_path = "get_requests"
@@ -43,6 +63,10 @@ def main():
 
     print(f"Fraction of data-type matches: {round(percentage_data_type_matches, 2)}%")
     print(f"Fraction of property-name matches: {round(percentage_property_name_matches, 2)}%")
+
+
+def main():
+    print_stats()
 
 
 if __name__ == "__main__":

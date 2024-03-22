@@ -1,12 +1,27 @@
 """
-This program compares the data types of the parameters in the post
+Filename : property_name_match.py
+Author : Archit Joshi (aj6082), Athina Stewart (as1896)
+Date Created : 3/21/2024
+Description : This script compares the data types of the properties of the parameters
+in the post requests of document 1 against the data types of the properties of the parameters
+of the parameters in document 2.
+Link to the original paper: https://ieeexplore.ieee.org/document/9885779
+Language : python3
 """
+
 import json
 import os
 import time
 
 
 def compare_dicts(dict1, dict2):
+    """
+    This function compares the values of the keys in the dictionaries. For all the keys
+    that are common to both dictionaries, if the values are the same, return True
+    :param dict1: post request dictionary
+    :param dict2: get request dictionary
+    :return: True if the values of the keys in the dictionaries are the same
+    """
     # Get the set of common keys
     common_keys = set(dict1.keys()) & set(dict2.keys())
 
@@ -44,7 +59,8 @@ def match_data_types(doc_1, doc_2):
 
 def compare_all_docs():
     """
-    This function compares all the documents in the post collection with all the documents in the get collection
+    This function compares all the documents in the post collection with all the
+    documents in the get collection
     :return: total match count
     """
     num_post_docs_examined = 0
@@ -65,21 +81,6 @@ def compare_all_docs():
             print("--------------------------------------------------")
             print("\n")
     return total_match_count
-
-
-    # for post_doc in post_collection.find():
-    #     print(f"Post doc: {post_doc}")
-    #     for get_doc in get_collection.find():
-    #         # drop the _id field
-    #         post_doc.pop('_id', None)
-    #         get_doc.pop('_id', None)
-    #         total_match_count += match_data_types(post_doc, get_doc)
-    #     num_post_docs_examined += 1
-    #     print(f"Number of post documents examined: {num_post_docs_examined}")
-    #     print(f"Total match count: {total_match_count}")
-    #     print("--------------------------------------------------")
-    #     print("\n")
-    # return total_match_count
 
 
 def main():
