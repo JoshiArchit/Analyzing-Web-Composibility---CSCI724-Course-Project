@@ -107,7 +107,7 @@ def clean_Data_Set():
                                 json.dump(post_document, post_file)
                             with open(f"get_requests/{file}", 'w') as get_file:
                                 json.dump(get_document, get_file)
-                        except:
+                        except json.JSONDecodeError as e:
                             print("Error writing to file. Skipping.")
                         valid_files += 1
                     else:
@@ -130,7 +130,7 @@ def clean_Data_Set():
                                 json.dump(post_document, post_file)
                             with open(f"get_requests/{file}", 'w') as get_file:
                                 json.dump(get_document, get_file)
-                        except:
+                        except yaml.YAMLError as e:
                             print("Error writing to file. Skipping.")
                         valid_files += 1
                     else:
