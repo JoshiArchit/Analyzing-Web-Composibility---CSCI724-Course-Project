@@ -5,9 +5,6 @@ import json
 import os
 import time
 
-# from dictionaries import api_doc_1, api_doc_2
-
-
 
 def compare_dicts(dict1, dict2):
     # Get the set of common keys
@@ -67,7 +64,7 @@ def compare_all_docs():
             print(f"Total match count: {total_match_count}")
             print("--------------------------------------------------")
             print("\n")
-
+    return total_match_count
 
 
     # for post_doc in post_collection.find():

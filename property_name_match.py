@@ -1,54 +1,9 @@
 """
 This script compares the names of the properties of the parameters
 """
-
-api_doc_1 = {
-    "person_details": {
-        "operation_get": {
-            "name": "string",
-            "age": "int"
-        },
-        "operation_post": {
-            "name": "string",
-            "age": "int",
-            "in": "query"
-        }
-    },
-    "house_details": {
-        "operation_get": {
-            "location": "string",
-            "price": "int"
-        },
-        "operation_post": {
-            "name": "string",
-            "age": "int"
-        }
-    }
-}
-
-api_doc_2 = {
-    "girl_details": {
-        "operation_get": {
-            "name": "string",
-            "age": "int",
-            "in": "float"
-        },
-        "operation_post": {
-            "name": "string",
-            "age": "int",
-        }
-    },
-    "house_details": {
-        "operation_get": {
-            "name": "string",
-            "height": "query"
-        },
-        "operation_post": {
-            "name": "string",
-            "age": "int"
-        }
-    }
-}
+import json
+import os
+import time
 
 
 def compare_dicts(dict1, dict2):
@@ -86,8 +41,36 @@ def match_property_names(doc_1, doc_2):
     return total_match_count
 
 
+def compare_all_docs():
+    """
+    This function compares all the documents in the post collection with all the documents in the get collection
+    :return: total match count
+    """
+    num_post_docs_examined = 0
+    total_match_count = 0
+
+    # iterate through each document in the post_requests folder found in the local directory
+    for filename in os.listdir("post_requests"):
+        with open(f"post_requests/{filename}", 'r') as post_file:
+            post_doc = json.load(post_file)
+            # iterate through each document in the get_requests folder found in the local directory
+            for filename in os.listdir("get_requests"):
+                with open(f"get_requests/{filename}", 'r') as get_file:
+                    get_doc = json.load(get_file)
+                    total_match_count += match_property_names(post_doc, get_doc)
+            num_post_docs_examined += 1
+            print(f"Number of post documents examined: {num_post_docs_examined}")
+            print(f"Total match count: {total_match_count}")
+            print("--------------------------------------------------")
+            print("\n")
+    return total_match_count
+
+
 def main():
-    print(f"Number of post-get matches = { match_property_names(api_doc_1, api_doc_2)}")
+    start_time = time.time()
+    print(f"Number of post-get matches = {compare_all_docs()}")
+    end_time = time.time()
+    print(f"Execution time: {end_time - start_time} seconds")
 
 
 if __name__ == "__main__":
