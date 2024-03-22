@@ -8,8 +8,6 @@ Link to the original paper: https://ieeexplore.ieee.org/document/9885779
 Language : python3
 """
 import json
-import os
-from database import get_collection, post_collection
 
 
 def getParameters(api, path_dictionary):
@@ -243,9 +241,10 @@ def unit_test_get_document():
     Unit test for the extractParameters function.
     :return: None
     """
-    get_file = 'APIsGuru/openapi.json.2'
+    get_file = 'APIsGuru/openapi.json.5'
     with open(get_file, 'r', encoding='utf-8') as api_file:
         get_data = json.load(api_file)
         get_document, post_document = extractParameters(get_data)
-        print(get_document)
-        print(post_document)
+        # print(get_document)
+        # print(post_document)
+        return get_document, post_document

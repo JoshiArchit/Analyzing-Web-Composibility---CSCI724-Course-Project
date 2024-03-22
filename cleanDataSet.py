@@ -9,8 +9,10 @@ Language : python3
 """
 import os
 import json
-
+from extractMethodParameters import extractParameters
 import yaml
+from database import get_collection, post_collection
+
 
 
 def extractFeatures(data):
@@ -29,7 +31,7 @@ def extractFeatures(data):
                 if 'get' in paths[path] or 'post' in paths[path]:
                     return True
     except KeyError as e:
-        print("Error in extractFeatures")
+        # print("Error in extractFeatures")
         return False
 
 
@@ -47,7 +49,7 @@ def get_num_paths(data):
             if len(data['paths']) > 2:
                 return True
     except KeyError as e:
-        print("Error in get_num_paths")
+        # print("Error in get_num_paths")
         return False
 
 
@@ -70,8 +72,15 @@ def get_server(data):
                     if 'url' in server.keys() and server['url'] != '':
                         return True
     except KeyError as e:
-        print("Error in get_server")
+        # print("Error in get_server")
         return False
+
+
+def clear_collections():
+    get_collection.delete_many({})
+    post_collection.delete_many({})
+
+
 
 
 def clean_Data_Set():
@@ -81,13 +90,21 @@ def clean_Data_Set():
 
     :return: None
     """
-    valid_file_name = 'final_valid_APIs_apisguru.txt'
-    # Clear the file
-    with open(valid_file_name, 'w') as valid_file:
-        valid_file.truncate(0)
+    # clear_collections()
+
+    # valid_file_name = 'final_valid_APIs_apisguru.txt'
+    # # Clear the file
+    # with open(valid_file_name, 'w') as valid_file:
+    #     valid_file.truncate(0)
 
     invalid_file_count = 0
     valid_files = 0
+
+    # create two folders in the local directory "post_requests" and "get_requests"
+    if not os.path.exists("post_requests"):
+        os.makedirs("post_requests")
+    if not os.path.exists("get_requests"):
+        os.makedirs("get_requests")
 
     folder_path = 'APIsGuru'
     # Iterate through all the files in APIsGuru folder
@@ -99,8 +116,22 @@ def clean_Data_Set():
                 with open(file_name, 'r', encoding='utf-8') as api_file:
                     data = json.load(api_file)
                     if extractFeatures(data) and get_server(data) and get_num_paths(data):
-                        with open(valid_file_name, 'a') as valid_file:
-                            valid_file.write(file + '\n')
+                        # with open(valid_file_name, 'a') as valid_file:
+                        #     valid_file.write(file + '\n')
+                        get_document, post_document = extractParameters(data)
+                        # try:
+                        #     get_collection.insert_one(get_document)
+                        #     post_collection.insert_one(post_document)
+                        # except:
+                        #     print("Error adding to database. Skipping.")
+                        try:
+                            # add the files to the get_requests and post_requests folders
+                            with open(f"post_requests/{file}", 'w') as post_file:
+                                json.dump(post_document, post_file)
+                            with open(f"get_requests/{file}", 'w') as get_file:
+                                json.dump(get_document, get_file)
+                        except:
+                            print("Error writing to file. Skipping.")
                         valid_files += 1
                     else:
                         invalid_file_count += 1
@@ -111,13 +142,26 @@ def clean_Data_Set():
 
         # Parse and process YAML files
         elif 'yaml' in file:
-            file_name = "internet/" + file
+            file_name = "APIsGuru/" + file
             try:
                 with open(file_name, 'r', encoding='utf-8') as api_file:
                     data = yaml.safe_load(api_file)
                     if get_num_paths(data) and extractFeatures(data) and get_server(data):
-                        with open(valid_file_name, 'a') as valid_file:
-                            valid_file.write(file + '\n')
+                        # with open(valid_file_name, 'a') as valid_file:
+                        #     valid_file.write(file + '\n')
+                        get_document, post_document = extractParameters(data)
+                        # try:
+                        #     get_collection.insert_one(get_document)
+                        #     post_collection.insert_one(post_document)
+                        # except:
+                        #     print("Error adding to database. Skipping.")
+                        try:
+                            with open(f"post_requests/{file}", 'w') as post_file:
+                                json.dump(post_document, post_file)
+                            with open(f"get_requests/{file}", 'w') as get_file:
+                                json.dump(get_document, get_file)
+                        except:
+                            print("Error writing to file. Skipping.")
                         valid_files += 1
                     else:
                         invalid_file_count += 1
