@@ -2,7 +2,9 @@
 Filename : extractMethodParameters
 Author : Archit Joshi (aj6082)
 Date Created : 3/20/2024
-Description : Script to extract the get/post parameters from the API file.
+Description : Script to extract the get/post parameters from the API file adhering to the
+constraints listed by the authors in the original paper.
+Link to the original paper: https://ieeexplore.ieee.org/document/9885779
 Language : python3
 """
 import json
