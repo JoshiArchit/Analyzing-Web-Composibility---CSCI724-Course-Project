@@ -25,7 +25,6 @@ def check_num_paths(data):
 
     return False
 
-
 def check_path_parameters(data):
     try:
         if 'paths' in data.keys():

@@ -16,7 +16,7 @@ def get_server(data):
                 for server in data['servers']:
                     if 'url' in server.keys() and server['url'] != '':
                         return True
-    except:
+    except KeyError as e:
         print("Error in get_server")
         return False
 

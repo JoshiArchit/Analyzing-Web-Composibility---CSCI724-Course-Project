@@ -11,7 +11,7 @@ def get_num_paths(data):
         if 'paths' in data.keys():
             if len(data['paths']) > 2:
                 return True
-    except:
+    except KeyError as e:
         print("Error in get_num_paths")
         return False
 
