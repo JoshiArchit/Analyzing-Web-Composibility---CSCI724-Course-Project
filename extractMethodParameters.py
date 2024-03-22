@@ -221,13 +221,25 @@ def extractParameters(api_file):
             else:
                 get_doc.pop(path)
         if 'post' in method_type:
-            dict_of_parameters = postParameters(api_file, method_type, 'parameters')
-            # if the list_of_parameters is not empty, add it to the doc
-            if dict_of_parameters != 0:
+            if 'parameters' in method_type['post']:
+                dict_of_parameters = postParameters(api_file, method_type, 'parameters')
                 post_doc[path] = dict_of_parameters
-            else:
-                post_doc.pop(path)
-
+                # if the list_of_parameters is not empty, add it to the doc
+                # if dict_of_parameters != 0:
+                #     post_doc[path] = dict_of_parameters
+                # else:
+                #     post_doc.pop(path)
+            elif 'requestBody' in method_type['post']:
+                dict_of_parameters = postParameters(api_file, method_type, 'requestBody')
+                post_doc[path] = dict_of_parameters
+                # if the list_of_parameters is not empty, add it to the doc
+                # if dict_of_parameters != 0:
+                #     post_doc[path] = dict_of_parameters
+                # else:
+                #     print(path)
+                #     post_doc.pop(path)
+            # Remove all the keys with a 0 value
+            post_doc = {k: v for k, v in post_doc.items() if v}
     return get_doc, post_doc
 
 
@@ -242,3 +254,4 @@ def unit_test_get_document():
 
 # unit_test()
 unit_test_get_document()
+
