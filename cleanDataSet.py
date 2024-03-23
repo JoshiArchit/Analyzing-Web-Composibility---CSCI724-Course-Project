@@ -36,7 +36,7 @@ def extractFeatures(data):
 
 def get_num_paths(data):
     """
-    Authors note - APIs need to have at least 3 paths three paths in order not to bias the
+    Authors note - APIs need to have at least 3 paths in order not to bias the
     average composability rate. To satisfy this condition we scan through the data and check if
     there are at least 3 paths in the API description.
 

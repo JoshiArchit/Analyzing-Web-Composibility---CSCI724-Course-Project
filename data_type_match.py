@@ -50,8 +50,8 @@ def match_data_types(doc_1, doc_2):
                     for operation_type_2 in doc_2[method_type_2]:
                         if "get" in operation_type_2:
                             get_parameters = doc_2[method_type_2][operation_type_2]
-                            # for all the keys that are common to both post_parameters
-                            # and get_parameters, if the values are the same, increment match count by 1
+                            # for all the keys that are common to both post_parameters and
+                            # get_parameters, if the values are the same, increment match count by 1
                             if compare_dicts(post_parameters, get_parameters):
                                 total_match_count += 1
     return total_match_count
