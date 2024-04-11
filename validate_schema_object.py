@@ -1,6 +1,13 @@
 
 
 def validate_schema(json_object):
+    """
+    This function validates whether an input schema follows the pre-defined rules as set out in the original paper.
+
+    :param json_object: schema to be validated in JSON format
+    :return: True if the input schema is valid, False otherwise
+    """
+
     is_valid_schema = True
 
     P_J = ["title", "multipleOf", "maximum", "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum"]

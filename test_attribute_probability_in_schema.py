@@ -3,6 +3,10 @@ import json
 import sys
 
 def main():
+    """
+    This program performs an initial analysis on the target dataset and determines the probabilities of the required attributes being present in the APIs.
+    :return:
+    """
     directory = "APIsGuru"
     files_in_directory = os.listdir(directory)
 
